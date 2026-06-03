@@ -1,4 +1,4 @@
-const Achievement  = require('../models/Achievement');
+const Achievement  = require('../models/Achievements');
 const User = require('../models/User');
 
 const addAchievement = async (req, res) => {

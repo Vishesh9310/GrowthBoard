@@ -2,7 +2,6 @@ import React from 'react'
 import Sidebar from '../components/layout/Sidebar';
 import { Outlet } from 'react-router-dom';
 
-
 const Workspace:React.FC = () => {
   return (
     <div className='flex min-h-fit font-sans py-10'>

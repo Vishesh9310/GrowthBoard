@@ -13,12 +13,13 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     contact: {
         type: Number,
+        unique: true
     },
-
     city: {
         type: String,
     },

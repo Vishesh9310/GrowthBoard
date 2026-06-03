@@ -3,10 +3,12 @@ import { BrowserRouter as Router } from 'react-router-dom'
 import Nav from './components/layout/Nav'
 import Footer from './components/layout/Footer'
 import AppRoutes from './routes/AppRoutes'
+import { AuthProvider } from './context/AuthContext'
 
 const App:React.FC = () => {
   return (
-    <Router>
+    <AuthProvider>
+      <Router>
       <div className='flex flex-col min-h-screen'>
         <Nav/>
 
@@ -17,6 +19,7 @@ const App:React.FC = () => {
         <Footer/>
       </div>
     </Router>
+    </AuthProvider>
   )
 }
 

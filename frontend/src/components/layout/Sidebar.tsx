@@ -7,13 +7,13 @@ import {
 } from "react-icons/md";
 import { BiLineChart } from "react-icons/bi";
 import { HiOutlineFolderOpen } from "react-icons/hi";
-import { FaTrophy, FaPowerOff } from "react-icons/fa";
+import { FaPowerOff, FaTrophy } from "react-icons/fa";
 import { GiRoad } from "react-icons/gi";
 import { RiTaskLine } from "react-icons/ri";
-// import { AuthContext } from "../../context/AuthContext";
+import { AuthContext } from "../../context/AuthContext";
 
 const Sidebar: React.FC = () => {
-  // const auth = useContext(AuthContext);
+  const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
   const navItems = [
@@ -28,7 +28,7 @@ const Sidebar: React.FC = () => {
   ];
 
   const handleLogout = () => {
-    // auth?.logout(); // context se logout
+    auth?.logout(); // context se logout
     navigate("/login"); // redirect login page
   };
 
