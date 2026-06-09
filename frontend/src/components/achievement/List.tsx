@@ -2,7 +2,6 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import type { Achievement } from "../../features/achievements/achievementType";
 import type { Skill } from "../../features/skills/skillType";
-const apiURL = import.meta.env.VITE_API_URL;
 
 type Props = {
   skills: Skill[];

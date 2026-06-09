@@ -17,7 +17,9 @@ const profileRoutes = require('./routes/profileRoutes');
 
 const app = express();
 
-app.use(cors({ origin: process.env.FR_URL, credentials: true }));
+const allowedOrigin = process.env.FR_URL || 'https://growthboard.netlify.app';
+
+app.use(cors({ origin: allowedOrigin, credentials: true, methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept']}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
