@@ -27,18 +27,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/uploads", express.static(path.join(__dirname, "../uploads")));
 // app.use(expressSession({ resave: false, saveUninitialized: false, secret: process.env.EXPRESS_SESSION_SECRET, }));
 app.use(expressSession({
-    resave: false,
-    secret: process.env.EXPRESS_SESSION_SECRET,
-    saveUninitialized: false,
-    store: MongoStore.create({
-        mongoUrl: process.env.MONGO_URI,
-        ttl: 14 * 24 * 60 * 60, // Sessions expire automatically in 14 days
-    }),
-    cookie: {
-        secure: true, // Required because you are using HTTPS on Render
-        httpOnly: true,
-        sameSite: 'none' // Crucial for cross-origin (Netlify to Render) cookie transfers
-    }
+  secret: process.env.EXPRESS_SESSION_SECRET || 'yourSecretKey',
+  resave: false,
+  saveUninitialized: false,
+  // This syntax works safely across legacy and modern connect-mongo instances
+  store: (typeof MongoStore.create === 'function') 
+    ? MongoStore.create({ mongoUrl: process.env.MONGO_URI }) 
+    : new MongoStore({ url: process.env.MONGO_URI }),
+  cookie: {
+    secure: true,
+    httpOnly: true,
+    sameSite: 'none'
+  }
 }));
 
 
