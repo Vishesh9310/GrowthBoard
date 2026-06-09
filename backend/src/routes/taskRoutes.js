@@ -1,6 +1,6 @@
 const express = require('express');
-const isLoggedIn = require('../middleware/isLoggedIn');
 const { getTasks, createTask, getTaskById, updateTask, deleteTask } = require('../controllers/taskController');
+const isLoggedIn = require('../middleware/isLoggedIn');
 const router = express.Router();
 
 router.get('/', isLoggedIn, getTasks);

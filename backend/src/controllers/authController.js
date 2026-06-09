@@ -8,8 +8,7 @@ module.exports.registerUser = async (req, res) => {
 
         const existingUser = await userModel.findOne({ email: email });
         if (existingUser) {
-            req.flash("error", "you already have an account, please login");
-            return res.redirect("/");
+            return res.status(400).json({sucess: false, message: "You already have an account. Please Login"});
         }
 
         bcrypt.genSalt(10, function (err, salt) {
@@ -19,9 +18,8 @@ module.exports.registerUser = async (req, res) => {
                 } else {
                     let user = await userModel.create({ email, password: hash, fullname });
                     let token = generateToken(user);
-                    res.cookie("token", token);
-                    req.flash("success", "User Created Successfully");
-                    return res.redirect("/");
+                    res.cookie("token", token, {httpOnly: true, sameSite: "none", secure: true, maxAge: 7*24*60*60*1000});
+                    req.status(201).json({sucess: true, message: "User created Successfully", token, user: {_id: user._id, fullname: user.fullname, email: user.email}});
                 }
             });
         });

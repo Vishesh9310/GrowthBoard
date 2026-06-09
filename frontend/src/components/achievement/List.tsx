@@ -2,6 +2,7 @@ import React from "react";
 import { NavLink } from "react-router-dom";
 import type { Achievement } from "../../features/achievements/achievementType";
 import type { Skill } from "../../features/skills/skillType";
+const apiURL = import.meta.env.VITE_API_URL;
 
 type Props = {
   skills: Skill[];
@@ -49,7 +50,7 @@ const List: React.FC<Props> = ({skills, achievements,  handleDelete}) => {
                 <>
                   {achievement.file.endsWith(".pdf") ? (
                     <a
-                      href={`http://localhost:5000/achievements/${achievement.file.replace(/\\/g, "/")}`}
+                      href={`${import.meta.env.VITE_API_URL}/${achievement.file.replace(/\\/g, "/")}`}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="block mt-2 text-blue-600 underline text-sm"
@@ -58,10 +59,15 @@ const List: React.FC<Props> = ({skills, achievements,  handleDelete}) => {
                     </a>
                   ) : (
                     <img
-                      src={`http://localhost:5000/achievements/${achievement.file.replace(/\\/g, "/")}`}
+                      src={achievement.file }
                       alt={getSkillName(achievement.skillId)}
                       className="rounded-lg mt-3 w-full object-cover"
                     />
+                    // <img
+                    //   src={`${apiURL}/${achievement.file.replace(/\\/g, "/")}`}
+                    //   alt={getSkillName(achievement.skillId)}
+                    //   className="rounded-lg mt-3 w-full object-cover"
+                    // />
                   )}
                 </>
               )}

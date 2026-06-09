@@ -1,25 +1,48 @@
 const multer = require("multer");
-const path = require("path");
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
+const cloudinary = require("../config/cloudinary");
 
-const storage = multer.diskStorage({
-    destination: (req, file, cb) =>{
-        cb(null, "uploads/");
-    },
-    filename: (req, file, cb) => {
-        cb(null, Date.now() + "-" + file.originalname);
-    },
+console.log("Loading upload middleware...");
+
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: async (req, file) => {
+    return {
+      folder: "growthboard",
+      resource_type: "auto", // Allows PDFs, Images, Docs, etc.
+      allowed_formats: ["jpg", "png", "jpeg", "pdf"],
+    };
+  },
 });
 
-const fileFilter = (req, file, cb) => {
-    const filetypes = /jpeg|jpg|png|gif/;
-    const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
-    const mimetype = filetypes.test(file.mimetype);
+const upload = multer({ storage });
 
-    if(extname && mimetype){
-        return cb(null, true);
-    }else{
-        cb("Error: Image Only");
-    }
-};
+module.exports = upload;
 
-module.exports = multer({storage, fileFilter});
+//for diskstorage: RAM
+
+// const multer = require("multer");
+// const path = require("path");
+
+// const storage = multer.diskStorage({
+//     destination: (req, file, cb) =>{
+//         cb(null, path.join(__dirname, "../../uploads"));
+//     },
+//     filename: (req, file, cb) => {
+//         cb(null, Date.now() + "-" + file.originalname);
+//     },
+// });
+
+// const fileFilter = (req, file, cb) => {
+//     const filetypes = /jpeg|jpg|png|gif/;
+//     const extname = filetypes.test(path.extname(file.originalname).toLowerCase());
+//     const mimetype = filetypes.test(file.mimetype);
+
+//     if(extname && mimetype){
+//         return cb(null, true);
+//     }else{
+//         cb("Error: Image Only");
+//     }
+// };
+
+// module.exports = multer({storage, fileFilter});
