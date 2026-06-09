@@ -58,7 +58,7 @@ const updateNote = async (req, res) => {
     const updatedNote = await Note.findOneAndUpdate(
       { _id: req.params.id, userId: req.user._id },
       req.body,
-      { new: true, runValidators: true }
+      { returnDocument: true, runValidators: true }
     );
 
     if (!updatedNote) {

@@ -81,7 +81,7 @@ const updateAchievementById = async (req, res) => {
         ...(date && { date }),
       },
       {
-        new: true,
+        returnDocument: 'after',
         runValidators: true,
       }
     );
