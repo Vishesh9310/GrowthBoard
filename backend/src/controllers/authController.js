@@ -8,7 +8,9 @@ module.exports.registerUser = async (req, res) => {
 
         const existingUser = await userModel.findOne({ email: email });
         if (existingUser) {
-            return res.status(400).json({sucess: false, message: "You already have an account. Please Login"});
+            return res.status(400).json({
+                success: false, message: "You already have an account. Please Login"
+            });
         }
 
         bcrypt.genSalt(10, function (err, salt) {
@@ -18,8 +20,8 @@ module.exports.registerUser = async (req, res) => {
                 } else {
                     let user = await userModel.create({ email, password: hash, fullname });
                     let token = generateToken(user);
-                    res.cookie("token", token, {httpOnly: true, sameSite: "none", secure: true, maxAge: 7*24*60*60*1000});
-                    req.status(201).json({sucess: true, message: "User created Successfully", token, user: {_id: user._id, fullname: user.fullname, email: user.email}});
+                    res.cookie("token", token, { httpOnly: true, sameSite: "none", secure: true, maxAge: 7 * 24 * 60 * 60 * 1000 });
+                    res.status(201).json({ success: true, message: "User created Successfully", token, user: { _id: user._id, fullname: user.fullname, email: user.email } });
                 }
             });
         });
@@ -36,30 +38,47 @@ module.exports.loginUser = async function (req, res) {
     }
 
     bcrypt.compare(password, user.password, function (err, result) {
+        if (err) {
+            return res.status(500).json({
+                success: false,
+                message: "Server Error"
+            });
+        }
+
         if (result) {
-            let token = generateToken(user);
+            // login success
+            const token = generateToken(user);
+
             res.cookie("token", token, {
                 httpOnly: true,
-                sameSite: 'None',
-                secure: true,
+                sameSite: "none",
+                secure: process.env.NODE_ENV === "production",
                 maxAge: 7 * 24 * 60 * 60 * 1000
-            }); //7days
-            return res.json({
+            });
+
+            return res.status(200).json({
                 success: true,
                 message: "Login successful",
-                token
+                user: {
+                    _id: user._id,
+                    fullname: user.fullname,
+                    email: user.email
+                }
             });
         } else {
-            return res.status(400).json({ success: false, message: "Invalid credentials" });
+            return res.status(400).json({
+                success: false,
+                message: "Invalid credentials"
+            });
         }
-    })
+    });
 };
 
 module.exports.logoutUser = function (req, res) {
     res.clearCookie("token", {
         httpOnly: true,
         secure: true,
-        sameSite: "None"
+        sameSite: "none"
     });
     res.json({ message: "Logged out" });
 };

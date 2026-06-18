@@ -14,12 +14,9 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: true,
-        unique: true
     },
     contact: {
         type: Number,
-        unique: true,
-        sparse: true
     },
     city: {
         type: String,
@@ -54,9 +51,8 @@ const userSchema = new mongoose.Schema({
         ref: "note",
     }],
     picture: String,
-});
+},{timestamps: true});
 
-// ✅ Prevent OverwriteModelError
+//prevent overwritemondelError
 const User = mongoose.models.User || mongoose.model("User", userSchema);
-
 module.exports = User;
